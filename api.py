@@ -1,8 +1,10 @@
 from flask import Flask, abort
 from flask_restful import Resource, Api, reqparse, fields, marshal
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app, resources={r"/api/*": {"origins": "*"}})
 api = Api(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -84,8 +86,8 @@ class Category(Resource):
         db.session.commit()
         return {'result' : True}
 
-api.add_resource(CategoryList, '/categories')
-api.add_resource(Category, '/categories/<int:cat_id>')
+api.add_resource(CategoryList, '/api/categories')
+api.add_resource(Category, '/api/categories/<int:cat_id>')
 
 if __name__ == "__main__":
     app.run(debug=True)
